@@ -59,37 +59,31 @@ export class BlockComponentComponent implements AfterViewInit {
     });
     
     this.newBlockService.newBlockAdded.subscribe((data) => {
-      const dropped = this.dragFuncion(data.event, data.block); // Make sure it's actually dropped in a valid place
-      if(dropped){
-        this.openPopUp(this.current_block);
-      }
+      this.dragFuncion(data.event, data.block);
+      this.openPopUp(this.current_block);
     });
     
     this.popUpService.saveRoutineEvent.subscribe((data) => {
       if(data.type_def === "Send_Name_Please"){
-        let send_routine = new Routines();
-        send_routine.id = this.current_routine.id;
-        send_routine.name = data.name
-        send_routine.description = this.current_routine.description
-        send_routine.array_block = this.current_routine.array_block
+        let send_routine = new Routines_Blocks(this.current_routine.id, data.name, this.current_routine.description);
         this.current_routine.name = data.name;
         this.popUpService.save_button(data, send_routine); //ximena implementar save console.log(this.current_routine.array_block);
         
-        /*this.rs.upload_routine(this.current_routine.array_block, this.current_routine.name).subscribe(
+        this.rs.upload_routine(this.current_routine.array_block, this.current_routine.name).subscribe(
           (response) => {
             console.log(response);
           },
           (error) => {
             console.log(error);
           }
-        );*/
+        );
       
       }
     });
 
     this.popUpService.NameRoutine.subscribe((data) => { // When clicking save this is called
       if(data == "ask"){
-        this.popUpService.ask_name("respond", this.current_routine);
+        this.popUpService.ask_name("respond", this.current_routine.name);
       }
     })
   }
@@ -111,15 +105,7 @@ export class BlockComponentComponent implements AfterViewInit {
         this.popUpService.openModal(block);
       }
     } else {
-      if ( block.class != 'routine'){
-        if(block.class == "speech" && block.name == "Talk"){
-          this.popUpService.openModal(block);
-        } else {
-          if (block.class != "routine" && block.class != "speech"){
-            this.popUpService.openModal(block);
-          }
-        }
-      }
+      this.popUpService.openModal(block);
     }
   }
 
@@ -210,7 +196,7 @@ export class BlockComponentComponent implements AfterViewInit {
     this.check_cells_positions();
   }
 
-  dragFuncion(event: DragEvent, block?: Block, send_block?: Send_block, rearenge?: boolean) : boolean{
+  dragFuncion(event: DragEvent, block?: Block, send_block?: Send_block, rearenge?: boolean){
 
     // Where was the block you grabbed ?
     const position = { row: 0, column: 0 };
@@ -271,6 +257,7 @@ export class BlockComponentComponent implements AfterViewInit {
 
     const colArray: number[] = Array.from(this.ColValues);
 
+    let RowValues = new Set<number>();
     // Iterate through the coordinates and add unique x values to the Set
 
     const divide = 7;
@@ -284,16 +271,12 @@ export class BlockComponentComponent implements AfterViewInit {
         this.delete_previous(position, rearenge);
       }
 
-      return false;
-
     } else if (this.current_block.name == this.current_routine.name){
       // You cant add the current routine to the main routine (or inception)
-      return false;
 
     } else {
       if(colArray.length == 0){
         this.current_routine.array_block[0] = [this.current_block];
-        return true;
       } else {
         for (const num of this.ColValues) {
           if(num + (this.dif/divide) > data.event.pageY){
@@ -333,11 +316,9 @@ export class BlockComponentComponent implements AfterViewInit {
               
               this.delete_previous(position, rearenge);
               this.current_routine.array_block[index_row].splice(index_col, 0, this.current_block);
-              return true;
             } else {
               this.delete_previous(position, rearenge);
               this.current_routine.array_block.splice(index_row, 0, [this.current_block]);
-              return true;
             }
             break;
           }
@@ -349,10 +330,7 @@ export class BlockComponentComponent implements AfterViewInit {
       if(data.event.pageY > colArray[colArray.length - 1] + (this.dif/divide)){
         this.delete_previous(position, rearenge);
         this.current_routine.array_block.push([this.current_block]);
-        return true;
       }
-
-      return false;
     }
   }
 
