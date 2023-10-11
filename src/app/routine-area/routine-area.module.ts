@@ -24,7 +24,8 @@ import { PopUpLoadPreviousRoutineComponent } from '../pop-up-load-previous-routi
     PopUpSaveComponent,
     PopUpClearComponent,
     PopUpRoutinesComponent,
-    PopUpLoadPreviousRoutineComponent,
+    PopUpLoadPreviousRoutineComponent
+
   ],
 })
 export class RoutineAreaModule { }

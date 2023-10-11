@@ -10,8 +10,6 @@ import { RestService } from '../rest.service';
 import { PopUpService } from '../pop-up.service';
 import { Body_Gestures, Facial_Expression, Speech, Tone_Voice, Routines_Blocks, Block } from '../models/blocks.model';
 import { NewBlockService } from '../new-block.service'
-import { Send_block } from '../models/routines.model';
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-sidebar-second',
@@ -27,10 +25,10 @@ export class SidebarSecondComponent implements OnDestroy {
   constructor(private scrollService: ScrollService, private rs: RestService, private new_block: NewBlockService, private pop_up: PopUpService) {
     this.pop_up.saveRoutineEvent.subscribe((data) => {
       if(data.type_def  != "Send_Name_Please"){
-        /*if(!this.options.some(option => option.label === data.routine.label)){
-          //data.routine.color = "medium"
-          //this.options.push(data.routine);
-        }*/
+        if(!this.options.some(option => option.label === data.routine.label)){
+          data.routine.color = "medium"
+          this.options.push(data.routine);
+        }
       }
     });
 
@@ -72,7 +70,6 @@ export class SidebarSecondComponent implements OnDestroy {
   options : Block[] = [];
 
   isOpen = false;
-  pop_over_block: Block;
 
   ngOnInit() {
 
@@ -156,42 +153,12 @@ export class SidebarSecondComponent implements OnDestroy {
     this.new_block.emitData(event, block);
   }
 
-  async openPopover(color: string, e:MouseEvent, item: Block) {
+  async openPopover(color: string, e:MouseEvent) {
     e.preventDefault();
-    if (color === 'medium') {
+    if (color === 'medium' ) {
       this.popover.event = e;
       this.isOpen = true;
-      this.pop_over_block = item;
     }
-  }
-
-  delete_routine(ev: Event){
-    // Delete routine
-    console.log("Delete");
-    console.log(this.pop_over_block);
-    this.rs.delete_routine(this.pop_over_block["label"])
-    .subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-  }
-
-  download_routine(ev: Event){
-    // Download routne
-    this.rs.download_routine(this.pop_over_block["label"])
-    .subscribe(
-      (response) => {
-        const blob = new Blob([response], { type: 'text/yaml' });
-        saveAs(blob, this.pop_over_block["label"] + ".yaml");
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
   }
 
 }

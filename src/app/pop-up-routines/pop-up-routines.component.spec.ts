@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SidebarAccordeonComponent } from './sidebar-accordeon.component';
+import { PopUpRoutinesComponent } from './pop-up-routines.component';
 
-describe('SidebarAccordeonComponent', () => {
-  let component: SidebarAccordeonComponent;
-  let fixture: ComponentFixture<SidebarAccordeonComponent>;
+describe('PopUpRoutinesComponent', () => {
+  let component: PopUpRoutinesComponent;
+  let fixture: ComponentFixture<PopUpRoutinesComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarAccordeonComponent ],
+      declarations: [ PopUpRoutinesComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidebarAccordeonComponent);
+    fixture = TestBed.createComponent(PopUpRoutinesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
