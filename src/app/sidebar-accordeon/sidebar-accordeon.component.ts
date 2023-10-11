@@ -151,10 +151,8 @@ export class SidebarAccordeonComponent implements OnDestroy {
     this.isExpanded = !this.isExpanded;
   }
 
-  /// LLAMAR 
   openLastRoutine(){
     console.log("Open Last Routine")
-    
   }
 
   async openPopover(color: string, e:MouseEvent, item: Block) {
