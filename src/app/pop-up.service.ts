@@ -6,7 +6,7 @@ import { Routines, Send_block } from './models/routines.model';
 import { PopUpClearComponent } from './pop-up-clear/pop-up-clear.component';
 import { Block, Routines_Blocks } from './models/blocks.model';
 import { SendData } from './new-block.service';
-import { RestService } from './rest.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -22,15 +22,32 @@ export class PopUpService {
   send_data: SendData = new SendData();
   send_data_routine: SendDataRoutine = new SendDataRoutine();
 
-  constructor(private modalController: ModalController, ) {} //private rs: RestService
+  constructor(private modalController: ModalController) {} //private rs: RestService
 
-   // TODO llamar al post del restservice para mandar la routine
+  server_url : string = "http://127.0.0.1:5000"; // este tiene que quedarse como "http://127.0.0.1:5000" en modo de desarrollo 
+  upload_db_url : string = `${this.server_url}/save_routine`;
+
   save_button(send_data: SendDataRoutine, routine?: Routines){
     if(routine){
       this.send_data_routine.routine = routine;
       this.send_data_routine.routine.name = send_data.name;
       this.send_data_routine.type_def = "Show_Routine";
-      this.saveRoutineEvent.emit(this.send_data_routine);
+
+      // this.rs.upload_routine(routine.array_block).subscribe(
+      //   (response) => {
+      //     console.log(response);
+      //     console.log(routine);
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   }
+      // );
+
+      console.log(routine.array_block); // Aqui Ximenaaaa
+
+      // this.http.post<any>(this.upload_db_url, routine.array_block).subscribe(data => {
+      //   console.log(data);
+      // })
 
     } else {
       this.send_data_routine.name = send_data.name;

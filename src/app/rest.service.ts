@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Block, Facial_Expression, Body_Gestures, Tone_Voice, Speech, Routines_Blocks } from './models/blocks.model';
 import { Observable } from 'rxjs/internal/Observable';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,8 +24,9 @@ export class RestService {
     return this.http.get<[Facial_Expression[], Body_Gestures[], Tone_Voice[], Speech[], Routines_Blocks[]]>(this.fetch_db_url);
   }
 
-  upload_routine(routine, routine_name): Observable<any>{
-    return this.http.post<any>(this.upload_db_url, {routine, routine_name});
+  upload_routine(routine){
+    console.log(routine);
+    return this.http.post<any>(this.upload_db_url, {routine});
   }
 
   delete_routine(name): Observable<any>{

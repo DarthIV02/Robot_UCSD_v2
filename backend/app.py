@@ -19,7 +19,7 @@ app.config['JSON_SORT_KEYS'] = False
 
 # Connect to mongo client (Atlas - Cloud)
 load_dotenv()
-user = os.getenv("user")
+user = os.getenv("username")
 password = os.getenv("password")
 
 client = MongoClient(f"mongodb+srv://{user}:{password}@robot-ucsd.oqmkaj6.mongodb.net", tls=True, tlsAllowInvalidCertificates=True) 
@@ -92,27 +92,28 @@ def fetch_from_db():
 def save_routine():
     if request.method == 'POST':
         routine = loads(request.data)
-    
-        try:
-            if (routines.find_one({"label": routine["routine_name"]})) is None:
-                db_routine = {}
-                db_routine["user"] = "TESTUSER"
-                db_routine["last_modified"] = datetime.now(tz=dt.timezone.utc)
-                db_routine["label"] = routine["routine_name"]
+        print(routine)
+    return jsonify({"Status": True})
+        # try:
+        #     if (routines.find_one({"label": routine["routine_name"]})) is None:
+        #         db_routine = {}
+        #         db_routine["user"] = "TESTUSER"
+        #         db_routine["last_modified"] = datetime.now(tz=dt.timezone.utc)
+        #         db_routine["label"] = routine["routine_name"]
 
-                file = {}
+        #         file = {}
 
-                for i in range(0, len(routine["routine"])):
-                    file["Segment" + str(i+1)] = routine["routine"][i]
+        #         for i in range(0, len(routine["routine"])):
+        #             file["Segment" + str(i+1)] = routine["routine"][i]
 
-                db_routine["file"] = bson.encode(file)
+        #         db_routine["file"] = bson.encode(file)
 
-                routines.insert_one(db_routine)
-                return jsonify({"Status" : "Insert completed"})
-            else:
-                return jsonify({"Status" : f"Routine {routine['routine_name']} already exists"})
-        except Exception as e:
-            return jsonify({"Status" : "An error ocurred: " + str(e)})
+        #         routines.insert_one(db_routine)
+        #         return jsonify({"Status" : "Insert completed"})
+        #     else:
+        #         return jsonify({"Status" : f"Routine {routine['routine_name']} already exists"})
+        # except Exception as e:
+        #     return jsonify({"Status" : "An error ocurred: " + str(e)})
 
 
 # READ

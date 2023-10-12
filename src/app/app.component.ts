@@ -8,7 +8,7 @@ import { ScrollDetail } from '@ionic/angular';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { PopUpService } from './pop-up.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RestService } from './rest.service';
 import { NewBlockService } from './new-block.service';
 
@@ -27,7 +27,7 @@ import { Facial_Expression } from './models/blocks.model';
     SidebarModule,
     FormsModule,
     HttpClientModule],
-  providers:[PopUpService, RestService, NewBlockService],
+  providers:[NewBlockService, PopUpService],
 })
 
 export class AppComponent implements OnInit {
