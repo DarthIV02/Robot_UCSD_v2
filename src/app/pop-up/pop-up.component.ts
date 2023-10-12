@@ -3,7 +3,8 @@ import { IonModal } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { PopUpService } from '../pop-up.service';
 import { Send_block } from '../models/routines.model';
-
+import { RestService } from '../rest.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pop-up',

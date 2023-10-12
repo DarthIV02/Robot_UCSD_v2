@@ -43,7 +43,7 @@ export class BlockComponentComponent implements AfterViewInit {
   endRect = new DOMRect;
   
   constructor(private popUpService: PopUpService, private newBlockService: NewBlockService, 
-    private ionContent: IonContent, private renderer: Renderer2, private rs: RestService, 
+    private ionContent: IonContent, private renderer: Renderer2,
     private popoverController: PopoverController) {
 
     this.current_routine.array_block = [];

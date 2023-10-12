@@ -8,8 +8,7 @@ import { SidebarSecondComponent } from '../sidebar-second/sidebar-second.compone
 import { ScrollDetail } from '@ionic/angular';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
-import { RestService } from '../rest.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SidebarAccordeonComponent } from '../sidebar-accordeon/sidebar-accordeon.component';
 
 @NgModule({
@@ -17,14 +16,12 @@ import { SidebarAccordeonComponent } from '../sidebar-accordeon/sidebar-accordeo
   imports: [
     CommonModule,
     IonicModule,
-    HttpClientModule
   ],
   exports: [
     SidebarFirstComponent,
     SidebarSecondComponent,
     SidebarAccordeonComponent,
   ],
-  providers: [RestService]
 })
 export class SidebarModule { 
   onIonInfinite(ev: any) {

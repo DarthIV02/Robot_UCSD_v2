@@ -22,24 +22,23 @@ export class PopUpService {
   send_data: SendData = new SendData();
   send_data_routine: SendDataRoutine = new SendDataRoutine();
 
-  constructor(private modalController: ModalController, ) {} //private rs: RestService
+  constructor(private modalController: ModalController) {} //private rs: RestService
 
-   // TODO llamar al post del restservice para mandar la routine
   save_button(send_data: SendDataRoutine, routine?: Routines){
     if(routine){
       this.send_data_routine.routine = routine;
       this.send_data_routine.routine.name = send_data.name;
       this.send_data_routine.type_def = "Show_Routine";
 
-      /*this.rs.upload_routine(routine, routine.name).subscribe(
-        (response) => {
-          console.log(response);
-          console.log(routine);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );*/
+      // this.rs.upload_routine(routine.array_block).subscribe(
+      //   (response) => {
+      //     console.log(response);
+      //     console.log(routine);
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   }
+      // );
       console.log(routine.array_block); // Aqui Ximenaaaa
 
     } else {

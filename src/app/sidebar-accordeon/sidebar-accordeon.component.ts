@@ -11,6 +11,7 @@ import { Body_Gestures, Facial_Expression, Speech, Tone_Voice, Routines_Blocks, 
 import { NewBlockService } from '../new-block.service'
 import { PopUpService } from '../pop-up.service';
 import { saveAs } from 'file-saver';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-sidebar-accordeon',
@@ -26,7 +27,7 @@ export class SidebarAccordeonComponent implements OnDestroy {
   talk: Speech;
   
   //Esta parte es para hacer que funcione el scroll en dos componentes 
-  constructor(private scrollService: ScrollService, private rs: RestService, private new_block: NewBlockService, private pop_up: PopUpService) {
+  constructor(private scrollService: ScrollService, private http: HttpClient, private new_block: NewBlockService, private pop_up: PopUpService) {
 
     this.scrollSubscription = this.scrollService.getScrollObservable().subscribe(({positionX, positionY }) => 
     {
@@ -41,7 +42,6 @@ export class SidebarAccordeonComponent implements OnDestroy {
       this.scrollSubscription.unsubscribe(); // Importante desuscribirse al destruir el componente
   }
 
- 
   facial_expresions: Facial_Expression[] = [];
   body_gestures: Body_Gestures[] = [];
   tone_of_voice: Tone_Voice[] = [];
@@ -57,61 +57,53 @@ export class SidebarAccordeonComponent implements OnDestroy {
   isOpen = false;
   pop_over_block: Block;
 
+  server_url : string = "http://127.0.0.1:5000"; // este tiene que quedarse como "http://127.0.0.1:5000" en modo de desarrollo 
+  fetch_db_url : string = `${this.server_url}/fetch_tables_from_db`;
+
+  response;
   ngOnInit() {
 
-    this.rs.read_db()
-    .subscribe(
-      (response) => {
+    this.http.get<any>(this.fetch_db_url).subscribe(data => {
+      this.response = data;
+      console.log(this.response)
 
-        this.facial_expresions = response[0];
-
-        this.facial_expresions.forEach(element => {
-          const block = new Facial_Expression(element.id, element.label, element.description, element.id_in_robot, element.level);
-          block.color = "success";
-          this.facial_expresions_blocks.push(block);
-        });
-
-        this.body_gestures = response[1];
-
-        this.body_gestures.forEach(element => {
-          const block = new Body_Gestures(element.id, element.label, element.description, element.id_in_robot, element.level);
-          block.color = "danger";
-          this.body_gestures_blocks.push(block);
-        });
-
-        this.tone_of_voice = response[2];
-
-        this.tone_of_voice.forEach(element => {
-          const block = new Tone_Voice(element.id, element.label, element.description, element.id_in_robot);
-          block.color = "tertiary";
-          this.tone_of_voice_blocks.push(block);
-        });
-        
-        this.speech = response[3];
-
-        this.speech.forEach(element => {
-          const block = new Speech(element.id, element.label, element.description, element.id_in_robot, element.utterance);
-          block.color = "warning";
-          if(element.label != "Talk"){
-            console.log(element.label);
-            this.speech_blocks.push(block);
-          } else {
-            this.talk = block;
-          }
-        });
-
-        this.routines = response[4];
-        this.routines.forEach(element => {
-          const block = new Routines_Blocks(element.id, element.label, element.description);
-          block.color = "medium";
-          this.routines_blocks.push(block);
-        });
-
-      },
-      (error) => {
-        console.log("No Data Found" + error);
-      }
-    )
+      this.facial_expresions = this.response[0];
+      this.facial_expresions.forEach(element => {
+        const block = new Facial_Expression(element.id, element.label, element.description, element.id_in_robot, element.level);
+        block.color = "success";
+        this.facial_expresions_blocks.push(block);
+      });
+      this.body_gestures = this.response[1];
+      this.body_gestures.forEach(element => {
+        const block = new Body_Gestures(element.id, element.label, element.description, element.id_in_robot, element.level);
+        block.color = "danger";
+        this.body_gestures_blocks.push(block);
+      });
+      this.tone_of_voice = this.response[2];
+      this.tone_of_voice.forEach(element => {
+        const block = new Tone_Voice(element.id, element.label, element.description, element.id_in_robot);
+        block.color = "tertiary";
+        this.tone_of_voice_blocks.push(block);
+      });
+      
+      this.speech = this.response[3];
+      this.speech.forEach(element => {
+        const block = new Speech(element.id, element.label, element.description, element.id_in_robot, element.utterance);
+        block.color = "warning";
+        if(element.label != "Talk"){
+          console.log(element.label);
+          this.speech_blocks.push(block);
+        } else {
+          this.talk = block;
+        }
+      });
+      this.routines = this.response[4];
+      this.routines.forEach(element => {
+        const block = new Routines_Blocks(element.id, element.label, element.description);
+        block.color = "medium";
+        this.routines_blocks.push(block);
+      });
+    })     
 
     this.generateItems();
 
@@ -168,29 +160,29 @@ export class SidebarAccordeonComponent implements OnDestroy {
     // Delete routine
     console.log("Delete");
     console.log(this.pop_over_block);
-    this.rs.delete_routine(this.pop_over_block["label"])
-    .subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
+    // this.rs.delete_routine(this.pop_over_block["label"])
+    // .subscribe(
+    //   (response) => {
+    //     console.log(response);
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // )
   }
 
   download_routine(ev: Event){
     // Download routne
-    this.rs.download_routine(this.pop_over_block["label"])
-    .subscribe(
-      (response) => {
-        const blob = new Blob([response], { type: 'text/yaml' });
-        saveAs(blob, this.pop_over_block["label"] + ".yaml");
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
+    // this.rs.download_routine(this.pop_over_block["label"])
+    // .subscribe(
+    //   (response) => {
+    //     const blob = new Blob([response], { type: 'text/yaml' });
+    //     saveAs(blob, this.pop_over_block["label"] + ".yaml");
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // )
   }
 
 }
