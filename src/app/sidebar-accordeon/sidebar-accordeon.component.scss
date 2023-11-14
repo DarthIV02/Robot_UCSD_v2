@@ -80,8 +80,7 @@
   }
 
   .list_puzzle{
-    //padding: 0px; /* Add padding for spacing */
-    //margin: 0px;
+    //padding: 10px; /* Add padding for spacing */
     width: fit-content;
     //width: (box-sizing + 5000px)!important;
     align-items: center; /* Center text within cells */
@@ -91,11 +90,4 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
-  }
-
-  .button{
-    margin: -10px;
-    border-color: none !important; 
-    border-width: 0px !important;
-    --box-shadow: none !important;
   }

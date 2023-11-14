@@ -11,7 +11,6 @@ export class NewBlockService {
   scrollEvent: EventEmitter<Event> = new EventEmitter<Event>();
 
   recentRoutine: EventEmitter<Event> = new EventEmitter<Event>();
-  newTab: EventEmitter<string> = new EventEmitter<string>();
 
   send_data: SendData = new SendData();
   send_data_routine: SendDataRoutine = new SendDataRoutine();
@@ -30,10 +29,6 @@ export class NewBlockService {
 
   sendRecentRoutine(){
     this.recentRoutine.emit();
-  }
-
-  newTabClicked(){
-    this.newTab.emit();
   }
 
 }
