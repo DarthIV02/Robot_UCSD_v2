@@ -69,13 +69,11 @@ export class BlockComponentComponent implements AfterViewInit {
 
       if (this.current_block.class == "routine"){
         this.current_block.parent_routines = this.current_routine.parent_routines.concat([this.current_routine.name])
-        console.log(this.current_routine); // <------- Checking routine
         let incoming_routine = new Routines();
         // Update the parent routine in subroutine
         this.rs.get_routine(this.current_block.name).subscribe( 
           (response) => {
             incoming_routine.name = this.current_block.name; // 
-            console.log(incoming_routine);
             let i = 0;
             response.forEach(element => { // Add blocks to the routine
               incoming_routine.array_block.push([])
@@ -90,12 +88,9 @@ export class BlockComponentComponent implements AfterViewInit {
               });
               i+=1;
             });
-            console.log("HI")
             let temp: SendDataRoutine = new SendDataRoutine();
-            console.log(incoming_routine)
             temp.routine = incoming_routine// Get the routine of that block
             temp.type_def = "Show_Routine";
-            console.log(this.current_routine.parent_routines);
             temp.routine.parent_routines = this.current_routine.parent_routines.concat([this.current_routine.name]);
             this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
           },
