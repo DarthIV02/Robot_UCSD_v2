@@ -89,8 +89,7 @@ def fetch_from_db():
         routines_entries = []
         for entry in routines.find():
             routines_entries.append({"id": str(entry["_id"]), "label": entry["label"], "user": entry["user"],
-                                    "last_modified": entry["last_modified"], "file": bson.decode(entry["file"]),
-                                    "parent_routines": entry["parent_routines"]})
+                                    "last_modified": entry["last_modified"], "file": bson.decode(entry["file"])})
 
         data.append(routines_entries)
 
@@ -141,8 +140,10 @@ def save_routine(replace):
                 for i in range(0, len(routine["routine"]["array_block"])):
                     file["Line_" + str(i+1)] = routine["routine"]["array_block"][i]
                 
+
                 new_data["file"] = bson.encode(file)
                 new_data["last_modified"] = datetime.now(tz=dt.timezone.utc)
+                new_data["parent_routines"] = routine["routine"]["parent_routines"]
 
                 routines.update_one(query, {"$set" : new_data})
 
@@ -190,7 +191,6 @@ def get_most_recent_routine():
         recent = routines.find_one(sort=[('last_modified', -1)])       
 
         name = recent["label"]
-        parent_routines = recent["parent_routines"]
 
         data.append([name])
         recent = bson.decode(recent["file"])
@@ -202,7 +202,6 @@ def get_most_recent_routine():
             struct.append(v)
         
         data.append(struct)
-        data.append([parent_routines])
 
         # Return response in JSON format
         return jsonify(data)
@@ -255,8 +254,7 @@ def fetch_routines_from_db():
         routines_entries = []
         for entry in routines.find():
             routines_entries.append({"id": str(entry["_id"]), "label": entry["label"], "user": entry["user"],
-                                    "last_modified": entry["last_modified"], "file": bson.decode(entry["file"]),
-                                    "parent_routines": entry["parent_routines"]})
+                                    "last_modified": entry["last_modified"], "file": bson.decode(entry["file"])})
             # routines_entries.append({"id": str(entry["_id"]), "label": entry["label"]})
         data.append(routines_entries)
 
@@ -276,20 +274,34 @@ def fetch_routine_from_db(name):
         # Get BSON file that contains the
         # data of the blocks that make up the routine
         routine = routines.find_one({"label": name})
-        parent_routines = routine["parent_routines"]
         routine = bson.decode(routine["file"])
         
         # Append all data to array
         struct = []
         for k, v in routine.items():
             struct.append(v)
-
-        struct.append(parent_routines)
-            
+        
         # Return array in JSON format
         return jsonify(struct)
     except Exception as e:
-        #Handle exception
+        # Handle exception
+        return jsonify({"Status" : "An error ocurred: " + str(e)})
+
+
+@app.route("/fecth_parent_routine/<name>", methods=["GET"])
+def fetch_parent_routine(name):
+    try:
+        # Refresh of Routines collections
+        routines = db["routines"]
+
+        # Get specific routine
+        # Get BSON file that contains the
+        # data of the blocks that make up the routine
+        routine = routines.find_one({"label": name})
+        print(routine)
+        return jsonify(routine)
+    except Exception as e:
+        # Handle exception
         return jsonify({"Status" : "An error ocurred: " + str(e)})
 
 # @app.route("/start_ros_talker", methods=["GET"])

@@ -95,6 +95,7 @@ export class BlockComponentComponent implements AfterViewInit {
             console.log(incoming_routine)
             temp.routine = incoming_routine// Get the routine of that block
             temp.type_def = "Show_Routine";
+            console.log(this.current_routine.parent_routines);
             temp.routine.parent_routines = this.current_routine.parent_routines.concat([this.current_routine.name]);
             this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
           },
@@ -112,6 +113,7 @@ export class BlockComponentComponent implements AfterViewInit {
     });
     
     this.popUpService.saveRoutineEvent.subscribe((data) => {
+      console.log(data);
       // When the save pop up is accepted it send the name from the pop-up to the curren routine
       if(data.type_def === "Show_Routine" && data.routine.name != ""){ 
         // It already send the routine so now it's sending it to the db
