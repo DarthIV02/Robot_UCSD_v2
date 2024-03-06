@@ -23,6 +23,8 @@ export class RestService {
   get_text_url : string = `${this.server_url}/load_current_routine_txt`;
   download_routines_url : string = `${this.server_url}/fetch_routines_from_db`;
   download_routine_url : string = `${this.server_url}/fetch_routine_from_db`;
+  download_parent_routine: string = `${this.server_url}/fecth_parent_routine`;
+
 
 
   // API endoint to fetch all documents from the databases
@@ -58,6 +60,10 @@ export class RestService {
   // API endoint to get all documents from the Routines database
   get_routines(){
     return this.http.get<[Routines_Blocks[]]>(this.download_routines_url);
+  }
+
+  get_parent_routines(name){
+    return this.http.get<[String]>(this.download_parent_routine + `/${name}`);
   }
 
   // API endoint to get a specific document from the Routines database
