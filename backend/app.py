@@ -298,8 +298,8 @@ def fetch_parent_routine(name):
         # Get BSON file that contains the
         # data of the blocks that make up the routine
         routine = routines.find_one({"label": name})
-        print(routine)
-        return jsonify(routine)
+        print(routine['parent_routines'])
+        return jsonify(routine['parent_routines'])
     except Exception as e:
         # Handle exception
         return jsonify({"Status" : "An error ocurred: " + str(e)})

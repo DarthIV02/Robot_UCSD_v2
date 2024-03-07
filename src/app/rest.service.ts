@@ -63,7 +63,7 @@ export class RestService {
   }
 
   get_parent_routines(name){
-    return this.http.get<[String]>(this.download_parent_routine + `/${name}`);
+    return this.http.get<Array<string>>(this.download_parent_routine + `/${name}`);
   }
 
   // API endoint to get a specific document from the Routines database

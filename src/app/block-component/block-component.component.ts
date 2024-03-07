@@ -68,7 +68,6 @@ export class BlockComponentComponent implements AfterViewInit {
       }
 
       if (this.current_block.class == "routine"){
-        this.current_block.parent_routines = this.current_routine.parent_routines.concat([this.current_routine.name])
         let incoming_routine = new Routines();
         // Update the parent routine in subroutine
         this.rs.get_routine(this.current_block.name).subscribe( 
@@ -173,10 +172,10 @@ export class BlockComponentComponent implements AfterViewInit {
           }
         }
       } else if (event != undefined && event.detail === 2){ // Double click on a routine block
-        let block = new Block('0', send_block.name, "") 
+        let block = new Block('0', send_block.name, "")
+        let routine = new Routines(); // Transform the routine
         this.rs.get_routine(send_block.name).subscribe( 
           (response) => {
-            let routine = new Routines(); // Transform the routine
             routine.name = send_block.name; // Get the name of the new tab
             let i = 0;
             response.forEach(element => { // Add blocks to the routine
@@ -192,11 +191,18 @@ export class BlockComponentComponent implements AfterViewInit {
               });
               i+=1;
             });
-            console.log(routine); //<-------------------------------- PRINT ROUTINE WHEN OPENNING TAB
-            this.tabService.addTabToContainer(block, routine); // Add new container and push new_routine
           },
           (error) => {
             console.log(error);
+          }
+        )
+
+        this.rs.get_parent_routines(send_block.name).subscribe( // Bring back parent routines from DB
+          (response) => {
+            response.forEach(parent_routine => {
+              routine.parent_routines.push(parent_routine)
+            });
+            this.tabService.addTabToContainer(block, routine); // Add new container and push new_routine
           }
         )
       }
@@ -379,7 +385,7 @@ export class BlockComponentComponent implements AfterViewInit {
     this.reset_edges();
 
     if(data.event.pageY < this.startRect.top || data.event.pageY > this.endRect.bottom || data.event.pageX < this.startRect.left){
-      
+ 
       // Drag is Outside of bounds
       if(rearenge){ // Drag a block outside the area bound
         if(this.current_block.class == "routine"){
@@ -425,7 +431,7 @@ export class BlockComponentComponent implements AfterViewInit {
 
       return false;
 
-    } else if (this.current_block.name == this.current_routine.name || this.current_block.parent_routines.indexOf(this.current_routine.name) > -1){
+    } else if (this.current_block.name == this.current_routine.name || this.current_routine.parent_routines.indexOf(this.current_block.name) > -1){
       // You cant add the current routine to the main routine (or inception) or a parent routine
       this.setOpenName(true);
       return false;

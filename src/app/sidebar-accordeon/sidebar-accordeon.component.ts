@@ -25,7 +25,6 @@ export class SidebarAccordeonComponent implements OnDestroy {
   onModifyClick(event: Event): void { // When clicking on modfy open new tab and load the routine
     this.rs.get_routine(this.pop_over_block.label).subscribe( 
       (response) => {
-        console.log(response);
         let routine = new Routines(); // Transform the routine
         routine.name = this.pop_over_block.label; // Get the name of the new tab
         let i = 0;
