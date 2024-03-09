@@ -45,8 +45,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
      python -m venv ./venv
      ```
    - Activate the environment:
-     - Windows: `venv\Scripts\activate`
-     - MacOS: `source venv/bin/activate`
+     - Windows: 
+     ```
+     venv\Scripts\activate
+     ```
+     - MacOS:
+     ```
+     source venv/bin/activate
+     ```
 
 3. **Python Requirements:**
    - Install Python requirements with the command:
@@ -61,10 +67,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 5. **Ionic App Dependencies:**
    - Install Ionic App dependencies with the following commands:
+     - Windows:
      ```
-     npm i @ionic/angular --legacy-peer-dev
-     npm install --legacy-peer-deps
-     npm install -g ionic
+     npm i @ionic/angular --legacy-peer-dev; npm install --legacy-peer-deps; npm install -g ionic
+     ```
+     - MacOS:
+     ```
+     npm i @ionic/angular --legacy-peer-dev && npm install --legacy-peer-deps && npm install -g ionic
      ```
 
 6. **Database Connection:**
@@ -89,15 +98,21 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Running Ionic App
 
-- Open a console window in the project directory.
-- To connect to the cloud database, activate the environment:
-  - On Windows: `venv\Scripts\activate`
-  - On MacOS: `source venv/bin/activate`
-- Connect to the cloud through the Python script:
+1. Open a console window in the project directory.
+2. To connect to the cloud database, activate the environment:
+  - On Windows: 
+  ```
+  venv\Scripts\activate
+  ```
+  - On MacOS: 
+  ```
+  source venv/bin/activate
+  ```
+3. Connect to the cloud through the Python script: 
   ```
   python backend\app.py
   ```
-- Without terminating this script, open a new console window and run `ionic serve` on the project file.
+4. Without terminating this script, open a new console window and run `ionic serve` on the project file.
 
 ## Usage
 
