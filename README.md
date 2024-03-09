@@ -68,7 +68,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 5. **Database Connection:**
    - Two ways to connect to the database:
-     - For Cloud Database:
+     1. For Cloud Database:
        - Navigate to the project directory.
        - Go to the backend folder and create a file named `.env`.
        - Add the following code to the `.env` file:
@@ -76,11 +76,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
          password = "BFL2N3YtqbA45O9b"
          MONGO_USR = "access"
          ```
-       - Run the command to connect to the database:
+       - Run the command inside the virtual environment to connect to the database:
          ```
          python backend\app.py
          ```
-     - For Local Database:
+     2. For Local Database:
        - Connect to local deployment, run mongosh without any options:
          ```
          mongosh
