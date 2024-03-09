@@ -28,11 +28,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    - Download and install NodeJS from [this link](https://nodejs.org/en/download).
    - Use default settings during the installation.
 
-6. **Browser Extension:**
-   - Install the "Allow CORS: Access-Control-Allow-Origin" extension in your browser (tested on Firefox and Chrome). Find the extension with the logo below.
-
-     ![CORS](./images/CORS.png)
-
 ### Installation
 
 1. **Clone the Project:**
@@ -60,12 +55,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
      pip install -r requirements.txt
      ```
 
-4. **Browser Setup:**
-   - In your chosen browser:
-     - Open the CORS extension and ensure "Toggle: ON" for a colored logo.
-     - Click "Open options page" and make sure "Access-Control-Allow-Headers" is turned on.
-
-5. **Ionic App Dependencies:**
+4. **Ionic App Dependencies:**
    - Install Ionic App dependencies with the following commands:
      - Windows:
      ```
@@ -76,7 +66,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
      npm i @ionic/angular --legacy-peer-dev && npm install --legacy-peer-deps && npm install -g ionic
      ```
 
-6. **Database Connection:**
+5. **Database Connection:**
    - Two ways to connect to the database:
      - For Cloud Database:
        - Navigate to the project directory.
