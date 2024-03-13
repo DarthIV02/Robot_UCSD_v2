@@ -28,11 +28,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    - Download and install NodeJS from [this link](https://nodejs.org/en/download).
    - Use default settings during the installation.
 
-6. **Browser Extension:**
-   - Install the "Allow CORS: Access-Control-Allow-Origin" extension in your browser (tested on Firefox and Chrome). Find the extension with the logo below.
-
-     ![CORS](./images/CORS.png)
-
 ### Installation
 
 1. **Clone the Project:**
@@ -60,25 +55,20 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
      pip install -r requirements.txt
      ```
 
-4. **Browser Setup:**
-   - In your chosen browser:
-     - Open the CORS extension and ensure "Toggle: ON" for a colored logo.
-     - Click "Open options page" and make sure "Access-Control-Allow-Headers" is turned on.
-
-5. **Ionic App Dependencies:**
+4. **Ionic App Dependencies:**
    - Install Ionic App dependencies with the following commands:
      - Windows:
      ```
-     npm i @ionic/angular --legacy-peer-dev; npm install --legacy-peer-deps; npm install -g ionic
+     npm i @ionic/angular --legacy-peer-dev; npm install --legacy-peer-deps; npm install -g ionic; python ionicdone.txt
      ```
      - MacOS:
      ```
-     npm i @ionic/angular --legacy-peer-dev && npm install --legacy-peer-deps && npm install -g ionic
+     npm i @ionic/angular --legacy-peer-dev && npm install --legacy-peer-deps && npm install -g ionic && python ionicdone.txt
      ```
 
-6. **Database Connection:**
+5. **Database Connection:**
    - Two ways to connect to the database:
-     - For Cloud Database:
+     1. For Cloud Database:
        - Navigate to the project directory.
        - Go to the backend folder and create a file named `.env`.
        - Add the following code to the `.env` file:
@@ -90,7 +80,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
          ```
          python backend\app.py
          ```
-     - For Local Database:
+     2. For Local Database:
        - Connect to local deployment, run mongosh without any options:
          ```
          mongosh
