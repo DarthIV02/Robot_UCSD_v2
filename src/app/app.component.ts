@@ -135,12 +135,19 @@ export class AppComponent implements OnInit {
                   });
                 });
                 this.tabDataList[0].tabName = current_routine.name; // Missing bring back name of the routine
+                this.rs.get_parent_routines(current_routine.name).subscribe( // Bring back parent routines from DB
+                  (response) => {
+                    response.forEach(parent_routine => {
+                      current_routine.parent_routines.push(parent_routine)
+                    });
+                    this.popUpService.push_routine(current_routine);
+                    this.routines[0] = current_routine;
+                  }
+                )
             },(error) => {
                 console.log("No Data Found" + error);
             }
-          )
-          this.popUpService.push_routine(current_routine);
-          this.routines[0] = current_routine;        
+          )        
         }
     });
 

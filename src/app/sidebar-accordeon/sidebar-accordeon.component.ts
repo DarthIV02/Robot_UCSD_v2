@@ -41,7 +41,14 @@ export class SidebarAccordeonComponent implements OnDestroy {
           });
           i+=1;
         });
-        this.tabService.addTabToContainer(this.pop_over_block, routine); // Add new container and push new_routine
+        this.rs.get_parent_routines(routine.name).subscribe( // Bring back the parents routines of the ones opened from sidebar
+          (response) => {
+            response.forEach(parent_routine => {
+              routine.parent_routines.push(parent_routine)
+            });
+            this.tabService.addTabToContainer(this.pop_over_block, routine); // Add new container and push new_routine
+          }
+        )
       },
       (error) => {
         console.log(error);

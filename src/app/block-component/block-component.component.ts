@@ -65,49 +65,47 @@ export class BlockComponentComponent implements AfterViewInit {
       const dropped = this.dragFuncion(data.event, data.block); // Make sure it's actually dropped in a valid place
       if(dropped){
         this.openPopUp(this.current_block); // When dropped open the corresponding pop-up
-      }
 
-      if (this.current_block.class == "routine"){
-        let incoming_routine = new Routines();
-        // Update the parent routine in subroutine
-        this.rs.get_routine(this.current_block.name).subscribe( 
-          (response) => {
-            incoming_routine.name = this.current_block.name; // 
-            let i = 0;
-            response.forEach(element => { // Add blocks to the routine
-              incoming_routine.array_block.push([])
-              element.forEach(block_item => {
-                let block_i = new Send_block();
-                block_i.class = block_item.class;
-                block_i.name = block_item.name;
-                block_i.level = block_item.level;
-                block_i.talk = block_item.talk;
-                block_i.clear = block_item.clear;
-                incoming_routine.array_block[i].push(block_i);
+        if (this.current_block.class == "routine"){
+          let incoming_routine = new Routines();
+          // Update the parent routine in subroutine
+          this.rs.get_routine(this.current_block.name).subscribe( 
+            (response) => {
+              incoming_routine.name = this.current_block.name; // 
+              let i = 0;
+              response.forEach(element => { // Add blocks to the routine
+                incoming_routine.array_block.push([])
+                element.forEach(block_item => {
+                  let block_i = new Send_block();
+                  block_i.class = block_item.class;
+                  block_i.name = block_item.name;
+                  block_i.level = block_item.level;
+                  block_i.talk = block_item.talk;
+                  block_i.clear = block_item.clear;
+                  incoming_routine.array_block[i].push(block_i);
+                });
+                i+=1;
               });
-              i+=1;
-            });
-            let temp: SendDataRoutine = new SendDataRoutine();
-            temp.routine = incoming_routine// Get the routine of that block
-            temp.type_def = "Show_Routine";
-            temp.routine.parent_routines = this.current_routine.parent_routines.concat([this.current_routine.name]);
-            this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
+              let temp: SendDataRoutine = new SendDataRoutine();
+              temp.routine = incoming_routine// Get the routine of that block
+              temp.type_def = "Show_Routine";
+              this.set_parents(temp.routine, this.current_routine.parent_routines, this.current_routine.name)
+              this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
+            },
+            (error) => {
+              console.log(error);
+            }
+          )
+        }
+
+        // Save the routine when adding block
+        this.send_data_routine.routine = this.current_routine;
+        this.send_data_routine.type_def = "Show_Routine";
+        this.popUpService.saveRoutineEvent.emit(this.send_data_routine);
       }
-      
-      // Save the routine when adding block
-      this.send_data_routine.routine = this.current_routine;
-      this.send_data_routine.type_def = "Show_Routine";
-      this.popUpService.saveRoutineEvent.emit(this.send_data_routine);
-      console.log("Current Routine", this.current_routine)
     });
     
     this.popUpService.saveRoutineEvent.subscribe((data) => {
-      console.log(data);
       // When the save pop up is accepted it send the name from the pop-up to the curren routine
       if(data.type_def === "Show_Routine" && data.routine.name != ""){ 
         // It already send the routine so now it's sending it to the db
@@ -390,11 +388,10 @@ export class BlockComponentComponent implements AfterViewInit {
       if(rearenge){ // Drag a block outside the area bound
         if(this.current_block.class == "routine"){
           let incoming_routine = new Routines();
-          // Update the parent routine in subroutine
+          // Get the blocks inside the routine
           this.rs.get_routine(this.current_block.name).subscribe( 
             (response) => {
-              incoming_routine.name = this.current_block.name; // 
-              console.log(incoming_routine);
+              incoming_routine.name = this.current_block.name; 
               let i = 0;
               response.forEach(element => { // Add blocks to the routine
                 incoming_routine.array_block.push([])
@@ -410,13 +407,13 @@ export class BlockComponentComponent implements AfterViewInit {
                 i+=1;
               });
               let temp: SendDataRoutine = new SendDataRoutine();
-              temp.routine = incoming_routine// Get the routine of that block
+              temp.routine = incoming_routine // Get the routine of that block
               temp.type_def = "Show_Routine";
               let all_routines = this.current_routine.parent_routines.concat([this.current_routine.name]); // Remove all parent routines
               for(let rout of all_routines){
                 const index = temp.routine.parent_routines.indexOf(rout, 0);
                 if (index > -1) {
-                  temp.routine.parent_routines.splice(index, 1);
+                  temp.routine.parent_routines.splice(index, 1); // Remove each one
                 }
               }
               this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
@@ -444,9 +441,6 @@ export class BlockComponentComponent implements AfterViewInit {
       } else { // It has more than 1 block
         let blocks = 0
         for (const num of this.cellPositions) {
-          console.log(num.center_y)
-          console.log(num.height/2)
-          console.log(data.event.pageY)
           if(num.center_y + num.height/2 > data.event.pageY){
             if(num.center_y - num.height/2 < data.event.pageY){
 
@@ -544,6 +538,49 @@ export class BlockComponentComponent implements AfterViewInit {
     } else {
       this.blocks -= 1;
     }
+  }
+
+  set_parents(modified: Routines, parent: Array<string>, parent_name: string){
+    modified.parent_routines = parent.concat([parent_name]);
+    // Make sure that they arent any duplicates
+    modified.parent_routines = modified.parent_routines.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    modified.array_block.forEach(block => (
+      block.forEach(b => {
+          if(b.class == "routine"){ 
+            let incoming_routine = new Routines();
+            // Update the parent routine in subroutine
+            this.rs.get_routine(b.name).subscribe( 
+              (response) => {
+                incoming_routine.name = b.name; // 
+                let i = 0;
+                response.forEach(element => { // Add blocks to the routine
+                  incoming_routine.array_block.push([])
+                  element.forEach(block_item => {
+                    let block_i = new Send_block();
+                    block_i.class = block_item.class;
+                    block_i.name = block_item.name;
+                    block_i.level = block_item.level;
+                    block_i.talk = block_item.talk;
+                    block_i.clear = block_item.clear;
+                    incoming_routine.array_block[i].push(block_i);
+                  });
+                  i+=1;
+                });
+                let temp: SendDataRoutine = new SendDataRoutine();
+                temp.routine = incoming_routine// Get the routine of that block
+                temp.type_def = "Show_Routine";
+                this.set_parents(temp.routine, modified.parent_routines, modified.name)
+                this.popUpService.saveRoutineEvent.emit(temp); // Overwrite that block
+              },
+              (error) => {
+                console.log(error);
+              }
+            )
+          }
+        })
+      ));
   }
 
   // Toast alerts

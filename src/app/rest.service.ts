@@ -23,7 +23,7 @@ export class RestService {
   get_text_url : string = `${this.server_url}/load_current_routine_txt`;
   download_routines_url : string = `${this.server_url}/fetch_routines_from_db`;
   download_routine_url : string = `${this.server_url}/fetch_routine_from_db`;
-  download_parent_routine: string = `${this.server_url}/fecth_parent_routine`;
+  download_parent_routine: string = `${this.server_url}/fetch_parent_routine`;
 
 
 

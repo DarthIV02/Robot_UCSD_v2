@@ -288,7 +288,7 @@ def fetch_routine_from_db(name):
         return jsonify({"Status" : "An error ocurred: " + str(e)})
 
 
-@app.route("/fecth_parent_routine/<name>", methods=["GET"])
+@app.route("/fetch_parent_routine/<name>", methods=["GET"])
 def fetch_parent_routine(name):
     try:
         # Refresh of Routines collections
