@@ -290,75 +290,49 @@ def fetch_routine_from_db(name):
 #     while True:
 #         talker.main()
 
-
-def recursive_routine_process(name, routine_array=[], subroutine_names=[]):
-
-    response = fetch_routine_from_db(name)
-    response = json.loads((response.data).decode('ascii'))
-
-
-    for line in response:
-        line_array = []
-
-        for block in line:
-            block_name = block["name"]
-
-            if "routine" in block.values():
-                subroutine_names.insert(0, block_name)
-                recursive_routine_process(block_name, routine_array, subroutine_names)
-            else:
-                line_array.append(block)
-
-        if len(line_array) > 0:
-            routine_array.append(line_array)
-
-    return routine_array, subroutine_names
-
-
 @app.route("/recursive_routine/<name>", methods=["GET"])
-def recursive_routine(name):
+def recursive_routine(name, count=0, sample_dict={}):
     
     response = fetch_routine_from_db(name)
     response = json.loads((response.data).decode('ascii'))
 
-    count = 1
-    display_data = {}
+    # display_data = {}
+    # local_count = 0
+
 
     for line in response:
+        line_array = []
         for block in line:
-
-            routine_array = []
-            subroutine_names = []
             block_name = block["name"]
 
             if "routine" in block.values():
-                routine_array, subroutine_names = recursive_routine_process(block_name, [], [])
-                subroutine_names.insert(0, block_name)
-        
-        if routine_array:
-
-            temp_dict = {}
-
-            print(routine_array)
-            print(subroutine_names)
-
-            # for i in range(len(subroutine_names)):
-            #     try:
-            #         temp_dict[subroutine_names[i]] = {subroutine_names[i+1]}
-            #     except:
-            #         break
-
-            # print(temp_dict)
+                # print(block)
+                sample_dict = recursive_routine(block_name, count, sample_dict)
+            else:
+                line_array.append(block)
+                # display_data[f"Behave_{local_count+1}"] = line
                 
-            # display_data[f"Behave_{count}"] = temp_dict
+        print(count)
+        print(sample_dict)
+        print(line_array)
+
+        if f"Behave_{count-1}" in sample_dict and len(line_array) > 0:
+            print(sample_dict)
+            # for block_item in line_array:
+            #     sample_dict[f"Behave_{count-1}"].append(block_item)
         else:
-            display_data[f"Behave_{count}"] = line
+            sample_dict[f"Behave_{count}"] = line_array
+            count += 1
 
-        count += 1
-
-    print(display_data)
+        # local_count += 1
+    
+    # sample_dict[f"Behave_{count}"].append(display_data)
+    
+    # print(display_data)
+    # print(sample_dict)
+    print()
         
-    return display_data
+    return sample_dict
 
 if __name__ == "__main__":
     app.run(debug=True)
