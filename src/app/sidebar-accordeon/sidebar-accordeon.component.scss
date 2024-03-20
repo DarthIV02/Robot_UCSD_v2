@@ -80,6 +80,10 @@
     background: var(--ion-color-medium);
   }
 
+  .purple{
+    background: var(--ion-color-purple);
+  }
+
   .list_puzzle{
     //padding: 0px; /* Add padding for spacing */
     //margin: 0px;
@@ -101,4 +105,9 @@
     --box-shadow: none !important;
     min-width: 50px;
     text-transform: none;
+  }
+
+  .drag{
+    width: 100%;
+    background-color: var(--ion-color-light);
   }

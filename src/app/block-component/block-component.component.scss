@@ -109,6 +109,16 @@ $colors: (
   height: calc(100% - 24px);
 }
 
+.purple{
+  background: var(--ion-color-purple);
+  padding: 10px;
+  margin-top: 10px;
+  width: fit-content;
+  color: black;
+  min-width: 50px !important;
+  height: calc(100% - 24px);
+}
+
 .red_2{
   background: var(--ion-color-danger);
   padding: 10px;
@@ -143,6 +153,16 @@ $colors: (
 
 .medium_2{
   background: var(--ion-color-medium);
+  padding: 10px;
+  color: black;
+  margin-bottom:-15px;
+  width: stretch !important;
+  flex-grow: 1;
+  height: calc(100% - 20px);
+}
+
+.purple_2{
+  background: var(--ion-color-purple);
   padding: 10px;
   color: black;
   margin-bottom:-15px;

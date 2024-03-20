@@ -7,7 +7,7 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ScrollService } from '../scroll.service';
 import { RestService } from '../rest.service';
-import { Body_Gestures, Facial_Expression, Speech, Tone_Voice, Routines_Blocks, Block } from '../models/blocks.model';
+import { Body_Gestures, Facial_Expression, Speech, Tone_Voice, Routines_Blocks, Block, Delay } from '../models/blocks.model';
 import { NewBlockService } from '../new-block.service'
 import { PopUpService } from '../pop-up.service';
 import { saveAs } from 'file-saver';
@@ -65,6 +65,7 @@ export class SidebarAccordeonComponent implements OnDestroy {
   private scrollSubscription: Subscription;
   
   talk: Speech;
+  delay: Delay;
   scroll_position: number;
   
   constructor(private scrollService: ScrollService, private rs: RestService, 
@@ -77,6 +78,8 @@ export class SidebarAccordeonComponent implements OnDestroy {
     });
 
     this.talk = new Speech("", "Talk", "Talk block", "A1", "");
+    this.delay = new Delay("", "Delay", "Delay block", "A1", 0);
+    this.delay.color = "purple"
 
     this.new_block.newTab.subscribe((response) =>{ 
       // When adding a new tab check for new blocks in sidebar

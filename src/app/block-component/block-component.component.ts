@@ -366,6 +366,9 @@ export class BlockComponentComponent implements AfterViewInit {
         case "Routines_Blocks":
           this.current_block.class = "routine";
           break;
+        case "Delay":
+          this.current_block.class = "delay";
+          break;
       }
     }
 
@@ -460,8 +463,9 @@ export class BlockComponentComponent implements AfterViewInit {
                 if((rearenge && (index_row != position.row || i != position.column)) || !rearenge){ // Dont take into account current block if rearanging
                   if(this.current_routine.array_block[index_row][i].class == this.current_block.class 
                     || this.current_routine.array_block[index_row][i].class == "routine"){
-                    if(this.current_block.name == "Talk" && this.current_routine.array_block[index_row][i].name == "Talk"){
-                      // Talk can be added
+                    if((this.current_block.name == "Talk" && this.current_routine.array_block[index_row][i].name == "Talk") ||
+                    (this.current_block.name == "Delay" && this.current_routine.array_block[index_row][i].name == "Delay") ){
+                      // Talk and Delay can be added
                     } else { // Current block cant be added
                       if(this.current_routine.array_block[index_row][i].class == "routine"){
                         this.setOpenRoutine(true)

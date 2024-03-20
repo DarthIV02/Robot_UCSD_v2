@@ -30,6 +30,10 @@ export class Send_block { // In rutine
             case "body_gesture":
               color = "danger";
               break;
+
+            case "delay":
+              color = "purple";
+              break;
           
             default:
               color = "red";

@@ -72,3 +72,16 @@ export class Routines_Blocks extends Block {
     super(id, label, description);
   }
 }
+
+export class Delay extends Block {
+
+  id_in_robot: string = "";
+  delay_time: number = 0;
+
+  constructor(id: string, label: string, description: string, id_in_robot: string, delay_time: number){
+    super(id, label, description);
+    this.id_in_robot = id_in_robot;
+    this.delay_time = delay_time
+  }
+    
+}

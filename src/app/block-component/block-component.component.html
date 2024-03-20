@@ -29,7 +29,7 @@
       (dragend)="dragFuncion($event, undefined, block, true)" *ngIf="j==0" (click)="openPopUp(block, $event)">
         <!--First semi-circle on top but without the circle to the right-->
         <ion-icon src="../../assets/semi_cropped.svg" [ngStyle]="{'height':'15px', 'width':'30px', 'fill': 'var(--ion-color-'+block.get_color()+')', 'float':'left', 'margin-top': '-4px', 'margin-left':'9px'}"></ion-icon>
-        <div [ngClass]="{'red': block.get_color() === 'danger', 'yellow' : block.get_color() === 'warning', 'green' : block.get_color() === 'success', 'medium' : block.get_color() === 'medium' }">
+        <div [ngClass]="{'red': block.get_color() === 'danger', 'yellow' : block.get_color() === 'warning', 'green' : block.get_color() === 'success', 'medium' : block.get_color() === 'medium', 'purple' : block.get_color() === 'purple' }">
           <div id="text" size="small">
             <ion-label class="just-label" *ngIf="block.name != 'Talk'">{{ block.name }}</ion-label> <!-- Actual square -->
             <div class="container" *ngIf="block.name == 'Talk'">
@@ -62,7 +62,7 @@
               <ion-icon src="../../assets/square-filled-geometric-shape-svgrepo-com.svg" [ngStyle]="{'fill': 'var(--ion-color-'+block.get_color()+')', 'width':'calc(100%+1px)', 'stroke':'var(--ion-color-'+block.get_color()+')', 'height':'calc(100% - 20px)'}"></ion-icon>
             </ion-col>
             <ion-col [ngStyle]="{'pading':'0', 'display': 'flex', 'flex-direction': 'column', 'height':'100%'}">
-              <div [ngClass]="{'red_2': block.get_color() === 'danger', 'yellow_2' : block.get_color() === 'warning', 'green_2' : block.get_color() === 'success', 'medium_2' : block.get_color() === 'medium'}">
+              <div [ngClass]="{'red_2': block.get_color() === 'danger', 'yellow_2' : block.get_color() === 'warning', 'green_2' : block.get_color() === 'success', 'medium_2' : block.get_color() === 'medium', 'purple_2' : block.get_color() === 'purple'}">
                 <div id="text" size="small">
                   <ion-label class="just-label" *ngIf="block.name != 'Talk'">{{ block.name }}</ion-label> <!-- Actual square -->
                   <div class="container" *ngIf="block.name == 'Talk'">

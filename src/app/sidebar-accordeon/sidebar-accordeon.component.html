@@ -7,7 +7,7 @@
         <ion-label>Non-Verbal</ion-label>
       </ion-item>
       <ion-item-group slot="content">
-        <!--Inside of the verbal accordeon-->
+        <!--Inside of the non-verbal accordeon-->
           <ion-accordion value="body-gestures">
             <ion-item slot="header" color="light"> <!--Background color-->
               <ion-icon aria-hidden="true" name="accessibility-outline" slot="start"></ion-icon>
@@ -64,6 +64,25 @@
               </ion-list>
             </div>
           </ion-accordion>
+          <!--Delay Block-->
+          <div slot="content" class="drag">
+            <div draggable="true"
+            (dragend)="onDragEnd($event, delay)"
+              title="{{ delay.description }}"
+              class="list_puzzle">
+              <ion-icon src="../../assets/semi_cropped.svg" [ngStyle]="{'height':'15px', 'width':'30px', 'fill': 'var(--ion-color-'+delay.color+')', 'float':'left', 'margin-top': '-2px', 'margin-left':'10px'}"></ion-icon>
+                <div class="square purple">
+                  <div id="text"
+                  size="small">
+                  <ion-button class="button" color="{{delay.color}}">{{ delay.label }}</ion-button>
+                  </div>
+                </div>
+                <ion-icon src="../../assets/square-filled-geometric-shape-svgrepo-com.svg" [ngStyle]="{'height': '30px!important', 'fill': 'var(--ion-color-'+delay.color+')', 'margin-top':'-6px', 'width':'10px', 'stroke':'none', 'float':'left'}"></ion-icon>
+                <ion-icon src="../../assets/anti_semi(1).svg" [ngStyle]="{'height':'15px', 'width':'30px', 'fill': 'var(--ion-color-'+delay.color+')', 'float':'left', 'margin-left':'-2px', 'margin-top':'-1px'}"></ion-icon>
+                <ion-icon src="../../assets/square-filled-geometric-shape-svgrepo-com.svg" [ngStyle]="{'height': '30px!important', 'fill': 'var(--ion-color-'+delay.color+')', 'margin-top':'-6px', 'margin-left':'-2px', 'width':'calc(100% - 40px + 4px)', 'stroke':'none', 'margin-bottom':'20px'}"></ion-icon>
+                <br>
+            </div>
+          </div>
       </ion-item-group>
     </ion-accordion>
     <ion-accordion value="Verbal" class="my-componente2">
@@ -72,7 +91,7 @@
         <ion-label>Verbal</ion-label>
       </ion-item>
       <div slot="content">
-        <!--Inside of the non-verbal accordeon-->
+        <!--Inside of the verbal accordeon-->
         <div draggable="true"
           (dragend)="onDragEnd($event, talk)"
           title="{{ talk.description }}"
