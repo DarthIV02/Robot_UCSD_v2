@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Block, Facial_Expression, Body_Gestures, Tone_Voice, Speech, Routines_Blocks } from './models/blocks.model';
 import { Observable } from 'rxjs/internal/Observable';
-import { Routines } from './models/routines.model';
+import { Routines, Send_block } from './models/routines.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +23,7 @@ export class RestService {
   get_text_url : string = `${this.server_url}/load_current_routine_txt`;
   download_routines_url : string = `${this.server_url}/fetch_routines_from_db`;
   download_routine_url : string = `${this.server_url}/fetch_routine_from_db`;
-
+  downnload_subroutines_url : string = `${this.server_url}/recursive_routine`;
 
   // API endoint to fetch all documents from the databases
   read_db(){
@@ -63,6 +63,46 @@ export class RestService {
   // API endoint to get a specific document from the Routines database
   get_routine(name){
     return this.http.get<Array<Array<any>>>(this.download_routine_url + `/${name}`);
+  }
+
+  recursive_routine(routine_name, routine_array): Array<any>{
+    
+    // let current_routine = [];
+
+    this.get_routine(routine_name)
+    .subscribe(
+      (response) => {
+        for(let i=0; i < response.length; i++){
+
+          for (let j = 0; j < response[i].length; j++) {
+
+            if (response[i][j]["class"] == "routine") {
+                let name = response[i][0]["name"];
+                this.recursive_routine(name, routine_array);
+            } else {
+              let new_block = new Send_block()
+              new_block = response[i][j];
+              console.log(new_block);
+              routine_array.push(response[i][j]);
+            }
+
+          }
+
+        }
+
+        // routine_array.push(current_routine);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+
+    return routine_array
+    
+  }
+
+  another_recursive_routine(routine_name) {
+    return this.http.get(this.downnload_subroutines_url + `/${routine_name}`);
   }
 
 }

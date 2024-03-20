@@ -9,6 +9,7 @@ import yaml
 import os
 from dotenv import load_dotenv
 from io import BytesIO
+import json
 
 # The app serves as the publisher for the ROS nodes communication
 # import talker
@@ -114,7 +115,7 @@ def save_routine(replace):
                 db_routine = {}
 
                 db_routine["user"] = "TESTUSER"
-                db_routine["label"] = routine["routine"]["name"]
+                db_routine["label"] = (routine["routine"]["name"]).lower()
 
                 file = {}
 
@@ -290,6 +291,74 @@ def fetch_routine_from_db(name):
 #         talker.main()
 
 
+def recursive_routine_process(name, routine_array=[], subroutine_names=[]):
+
+    response = fetch_routine_from_db(name)
+    response = json.loads((response.data).decode('ascii'))
+
+
+    for line in response:
+        line_array = []
+
+        for block in line:
+            block_name = block["name"]
+
+            if "routine" in block.values():
+                subroutine_names.insert(0, block_name)
+                recursive_routine_process(block_name, routine_array, subroutine_names)
+            else:
+                line_array.append(block)
+
+        if len(line_array) > 0:
+            routine_array.append(line_array)
+
+    return routine_array, subroutine_names
+
+
+@app.route("/recursive_routine/<name>", methods=["GET"])
+def recursive_routine(name):
+    
+    response = fetch_routine_from_db(name)
+    response = json.loads((response.data).decode('ascii'))
+
+    count = 1
+    display_data = {}
+
+    for line in response:
+        for block in line:
+
+            routine_array = []
+            subroutine_names = []
+            block_name = block["name"]
+
+            if "routine" in block.values():
+                routine_array, subroutine_names = recursive_routine_process(block_name, [], [])
+                subroutine_names.insert(0, block_name)
+        
+        if routine_array:
+
+            temp_dict = {}
+
+            print(routine_array)
+            print(subroutine_names)
+
+            # for i in range(len(subroutine_names)):
+            #     try:
+            #         temp_dict[subroutine_names[i]] = {subroutine_names[i+1]}
+            #     except:
+            #         break
+
+            # print(temp_dict)
+                
+            # display_data[f"Behave_{count}"] = temp_dict
+        else:
+            display_data[f"Behave_{count}"] = line
+
+        count += 1
+
+    print(display_data)
+        
+    return display_data
 
 if __name__ == "__main__":
     app.run(debug=True)

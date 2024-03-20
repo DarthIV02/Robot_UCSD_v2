@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
   routines: Array<Routines> = []; // All of the routines in the tabs
   renaming_routine: boolean = false;
   send_data_routine: SendDataRoutine = new SendDataRoutine();
-
+  
   constructor(private new_block: NewBlockService, private popUpService: PopUpService, private componentFactoryResolver: ComponentFactoryResolver,
     private popoverController: PopoverController, private rs: RestService, private tabService: TabServiceService) {
       this.popUpService.retrieve_current_routine.subscribe( // When 'get' routine is called
@@ -236,36 +236,24 @@ export class AppComponent implements OnInit {
 
     // Call to REST service that indicates the user wants
     // a preview of the current routine in YAML format.
+
     this.rs.get_routine_text_preview()
         .subscribe(
           (response) => {
             if(document.getElementById("yamlText")){
-              let display_data = {} as any;
-    
-              // Iterate through the current routine's blocks
-              // and add them to a dictionary.
-              for(let i=0; i < this.routine.array_block.length; i++){
-                let Line = "Behave_" + (i+1);
 
-                // Iterate through each of the properties of each 
-                // block in the routine.
-                // If property is null, 0, "" delete from object
-                // and not show it on YAML preview
-                for(let j=0; j < this.routine.array_block[i].length; j++){
-                  Object.entries(this.routine.array_block[i][j]).forEach(([key, value]) => {
-                      if(!value){
-                        const name = `${key}`;
-                        delete this.routine.array_block[i][j][name];
-                      }
-
-                    })
+              this.rs.another_recursive_routine(this.routine.name).subscribe( 
+                (response) => {
+                  console.log(response)
+                  document.getElementById("yamlText").innerHTML = yaml.dump(response);
+                },
+                (error) => {
+                  console.log(error)
                 }
-                console.log(this.routine.array_block[i]);
-                display_data[Line] = this.routine.array_block[i];
-              }
-    
-              // Display the dictionary in a YAML formatted string.
-              document.getElementById("yamlText").innerHTML = yaml.dump(display_data);;
+
+              )
+
+                    
             }
           },
           (error) => {

@@ -37,7 +37,7 @@
     "ngx-drag-drop": "^16.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "yaml": "^2.3.3",
+    "yaml": "^2.4.1",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
