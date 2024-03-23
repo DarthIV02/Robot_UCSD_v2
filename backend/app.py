@@ -28,14 +28,21 @@ password = os.getenv("password")
 
 # Access to database containing all data
 client = MongoClient(f"mongodb+srv://{user}:{password}@robot-ucsd.oqmkaj6.mongodb.net", tls=True, tlsAllowInvalidCertificates=True) 
-db = client["ROBOT-UCSD"]
+# db = client["ROBOT-UCSD"]
+### 16/02/24 cmabie @robot-ucsd a @robotucsd_testing, donde YO estoy haciendo pruebas
+db = client["ROBOTUCSD_TESTING"]
+
 
 facial_expressions = db["facial_expressions"] # Creation/Access of table Expressions
 body_gestures = db["body_gestures"]  # Creation/Access of table Movements
-sounds = db["tones_of_voice"] # Creation/Access of table Tones of Voice
-verbal = db["speech_elements"]  # Creation/Access of table Speech
+# sounds = db["tones_of_voice"] # Creation/Access of table Tones of Voice
+# verbal = db["speech_elements"]  # Creation/Access of table Speech
 # actions = db["actions"]  # Creation/Access of table actions
-actions = db["actions"]  # Creation/Access of table actions
+# actions = db["actions"]  # Creation/Access of table actions
+sounds = db["sounds"] # Creation/Access of table Tones of Voice
+verbal = db["talk"]  # Creation/Access of table Speech
+actions = db["actions"]  # Creation/Access of table Routines
+
 
 # Connect to MONGO CLIENT (LOCAL LEVEL)
 # client = MongoClient("127.0.0.1", 27017)
