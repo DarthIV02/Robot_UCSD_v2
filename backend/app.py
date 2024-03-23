@@ -35,13 +35,11 @@ db = client["ROBOTUCSD_TESTING"]
 
 facial_expressions = db["facial_expressions"] # Creation/Access of table Expressions
 body_gestures = db["body_gestures"]  # Creation/Access of table Movements
+actions = db["actions"]  # Creation/Access of table Routines
 # sounds = db["tones_of_voice"] # Creation/Access of table Tones of Voice
 # verbal = db["speech_elements"]  # Creation/Access of table Speech
-# actions = db["actions"]  # Creation/Access of table actions
-# actions = db["actions"]  # Creation/Access of table actions
 sounds = db["sounds"] # Creation/Access of table Tones of Voice
 verbal = db["talk"]  # Creation/Access of table Speech
-actions = db["actions"]  # Creation/Access of table Routines
 
 
 # Connect to MONGO CLIENT (LOCAL LEVEL)
@@ -69,9 +67,6 @@ def fetch_from_db():
         data = [] # Array to store the arrays containing the contents of each collection (array of arrays)
 
         facial_expressions_entries = []
-        # for entry in facial_expressions.find():
-        #     facial_expressions_entries.append({"id": str(entry["_id"]), "label": entry["expression_name"],
-        #                                       "level": 0, "description": entry["description"], "id_in_robot": entry["id_in_robot"]})
         for entry in facial_expressions.find():
             facial_expressions_entries.append({"id": str(entry["_id"]), 
                                                "label": entry["expression_name"],
@@ -82,9 +77,6 @@ def fetch_from_db():
         data.append(facial_expressions_entries)
 
         body_gestures_entries = []
-        # for entry in body_gestures.find():
-        #     body_gestures_entries.append({"id": str(
-        #         entry["_id"]), "label": entry["movement_name"], "description": entry["description"], "id_in_robot": entry["id_in_robot"]})
         for entry in body_gestures.find():
             body_gestures_entries.append({"id": str(entry["_id"]), 
                                           "label": entry["movement_name"], 
@@ -94,9 +86,6 @@ def fetch_from_db():
         data.append(body_gestures_entries)
 
         sounds_entries = []
-        # for entry in sounds.find():
-        #     sounds_entries.append({"id": str(
-        #         entry["_id"]), "label": entry["tone_name"], "description": entry["description"], "id_in_robot": entry["id_in_robot"]})
         for entry in sounds.find():
             sounds_entries.append({"id": str(entry["_id"]), 
                                    "label": entry["element_name"], 
@@ -107,9 +96,6 @@ def fetch_from_db():
         data.append(sounds_entries)
 
         verbal_entries = []
-        # for entry in verbal.find():
-        #     verbal_entries.append({"id": str(entry["_id"]), "label": entry["element_name"],
-                                        #    "description": entry["description"], "id_in_robot": entry["id_in_robot"], "utterance": entry["utterance"]})
         for entry in verbal.find():
             verbal_entries.append({"id": str(entry["_id"]), 
                                    "label": entry["element_name"],
@@ -120,12 +106,6 @@ def fetch_from_db():
 
         # Fetch documents from the actions collections in the local database
         # to send to the sidebar angular component
-        # actions_entries = []
-        # for entry in actions.find():
-        #     actions_entries.append({"id": str(entry["_id"]), "label": entry["label"], "user": entry["user"],
-        #                             "last_modified": entry["last_modified"], "file": bson.decode(entry["file"])})
-
-        # data.append(actions_entries)
         actions_entries = []
         for entry in actions.find():
             actions_entries.append({"id": str(entry["_id"]), 
@@ -330,8 +310,6 @@ def fetch_routine_from_db(name):
 #     # node that sends data to the ROS listener node 
 #     while True:
 #         talker.main()
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

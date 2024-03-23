@@ -150,7 +150,6 @@ export class SidebarAccordeonComponent implements OnDestroy {
           this.body_gestures_blocks.push(block);
         });
 
-        // TODO Cambiar nombre a arrays para que haga match con los arrays de python
         // Third array corresponds to the sounds documents
         this.sounds = response[2];
 
