@@ -290,15 +290,10 @@ def fetch_routine_from_db(name):
 #     while True:
 #         talker.main()
 
-@app.route("/recursive_routine/<name>", methods=["GET"])
-def recursive_routine(name, count=0, sample_dict={}):
+def recursive_routine_process(name, sample_dict={}):
     
     response = fetch_routine_from_db(name)
     response = json.loads((response.data).decode('ascii'))
-
-    # display_data = {}
-    # local_count = 0
-
 
     for line in response:
         line_array = []
@@ -306,33 +301,67 @@ def recursive_routine(name, count=0, sample_dict={}):
             block_name = block["name"]
 
             if "routine" in block.values():
-                # print(block)
-                sample_dict = recursive_routine(block_name, count, sample_dict)
+                recursive_routine_process(block_name, sample_dict)
             else:
-                line_array.append(block)
-                # display_data[f"Behave_{local_count+1}"] = line
+                new_block = {}
+
+                for key, value in block.items():
+                    if value != 0:
+                        if len(value) > 0:
+                            new_block[key] = value
+                    
+                line_array.append(new_block)
                 
-        print(count)
-        print(sample_dict)
-        print(line_array)
-
-        if f"Behave_{count-1}" in sample_dict and len(line_array) > 0:
-            print(sample_dict)
-            # for block_item in line_array:
-            #     sample_dict[f"Behave_{count-1}"].append(block_item)
-        else:
-            sample_dict[f"Behave_{count}"] = line_array
-            count += 1
-
-        # local_count += 1
-    
-    # sample_dict[f"Behave_{count}"].append(display_data)
-    
-    # print(display_data)
-    # print(sample_dict)
-    print()
+        sample_dict[f"Subroutine {name}"] = line_array
         
     return sample_dict
+
+@app.route("/recursive_routine/<name>", methods=["GET"])
+def recursive_routine(name):
+    response = fetch_routine_from_db(name)
+    response = json.loads((response.data).decode('ascii'))
+
+    display_data = {}
+
+    local_count = 1
+    count = 0
+
+    for line in response:
+        line_array = []
+        subroutines = {}
+
+        for block in line:
+            block_name = block["name"]
+
+            if "routine" in block.values():
+                subroutines = recursive_routine_process(block_name, {})
+                break
+
+            else:
+                new_block = {}
+
+                for key, value in block.items():
+                    print()
+                    print(key, value)
+                    print(type(value))
+                    if value != 0 and isinstance(value, int):
+                        print("puro int")
+                        new_block[key] = value
+                    else:
+                        print("no int")
+                        if len(value) > 0:
+                            new_block[key] = value
+                    
+                line_array.append(new_block)
+        
+        if subroutines:
+            display_data[f"Behave_{local_count}"] = subroutines
+        else:
+            display_data[f"Behave_{local_count}"] = line_array
+
+        local_count += 1
+                
+    return display_data
 
 if __name__ == "__main__":
     app.run(debug=True)

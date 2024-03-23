@@ -11,20 +11,14 @@
     "BEHAVE_2" : [{"HUM"}, {"HAPPY"}]
 }
 
-{'Behave_0': [
-    {'name': 'Talk', 'class': 'speech', 'level': 0, 'talk': '', 'clear': '', 'tone_voice': 'Sad'}, 
-    [], 
-    [
+{
+    'Level_1': [
+        {'name': 'Talk', 'class': 'speech', 'level': 0, 'talk': '', 'clear': '', 'tone_voice': 'Sad'}
+    ], 
+    'Level_0': [
         {'name': 'Nod', 'class': 'body_gesture', 'level': 0, 'talk': '', 'clear': ''}, 
         {'name': 'Talk', 'class': 'speech', 'level': 0, 'talk': '', 'clear': ''}
-    ],  
-    [], 
-    [
-        {'name': 'Hum', 'class': 'speech', 'level': 0, 'talk': '', 'clear': ''}, 
-        {'name': 'Happy', 'class': 'facial_expression', 'level': 1, 'talk': '', 'clear': ''}
-    ]
     ]
 }
-
 
 
