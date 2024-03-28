@@ -107,7 +107,6 @@ def save_routine(replace):
     # JSON data of a routine
     if request.method == 'POST':
         routine = loads(request.data)
-        print(replace)
         try:
             # Look for the given name for the routine in the localdatabase, if not found, insert routine
             # as a new document
@@ -263,6 +262,8 @@ def fetch_routines_from_db():
 @app.route("/fetch_routine_from_db/<name>", methods=["GET"])
 def fetch_routine_from_db(name):
     try:
+        name = name.lower()
+
         # Refresh of Routines collections
         routines = db["routines"]
 
@@ -291,7 +292,6 @@ def fetch_routine_from_db(name):
 #         talker.main()
 
 def recursive_routine_process(name, sample_dict={}):
-    
     response = fetch_routine_from_db(name)
     response = json.loads((response.data).decode('ascii'))
 
@@ -306,7 +306,11 @@ def recursive_routine_process(name, sample_dict={}):
                 new_block = {}
 
                 for key, value in block.items():
-                    if value != 0:
+                    if value != 0 and isinstance(value, int):
+                        new_block[key] = value
+                    elif value == 0 and isinstance(value, int):
+                        pass
+                    else:
                         if len(value) > 0:
                             new_block[key] = value
                     
@@ -318,6 +322,7 @@ def recursive_routine_process(name, sample_dict={}):
 
 @app.route("/recursive_routine/<name>", methods=["GET"])
 def recursive_routine(name):
+
     response = fetch_routine_from_db(name)
     response = json.loads((response.data).decode('ascii'))
 
@@ -341,14 +346,12 @@ def recursive_routine(name):
                 new_block = {}
 
                 for key, value in block.items():
-                    print()
-                    print(key, value)
-                    print(type(value))
+   
                     if value != 0 and isinstance(value, int):
-                        print("puro int")
                         new_block[key] = value
+                    elif value == 0 and isinstance(value, int):
+                        pass
                     else:
-                        print("no int")
                         if len(value) > 0:
                             new_block[key] = value
                     
